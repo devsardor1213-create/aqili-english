@@ -19,7 +19,8 @@ def init_db():
             joined_date TEXT,
             is_blocked INTEGER DEFAULT 0,
             is_admin INTEGER DEFAULT 0,
-            last_bonus_date TEXT
+            last_bonus_date TEXT,
+            target_lang TEXT DEFAULT 'en'
         )
     """)
     
@@ -28,7 +29,8 @@ def init_db():
         CREATE TABLE IF NOT EXISTS words (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             english_word TEXT,
-            uzbek_translation TEXT
+            uzbek_translation TEXT,
+            lang TEXT DEFAULT 'en'
         )
     """)
     
@@ -58,7 +60,17 @@ def init_db():
     cursor.execute("""
         CREATE TABLE IF NOT EXISTS daily_words (
             date TEXT,
-            word_id INTEGER
+            word_id INTEGER,
+            lang TEXT DEFAULT 'en'
+        )
+    """)
+    
+    # User Tests Tracking (to prevent repeating tests)
+    cursor.execute("""
+        CREATE TABLE IF NOT EXISTS user_tests (
+            telegram_id INTEGER,
+            word_id INTEGER,
+            UNIQUE(telegram_id, word_id)
         )
     """)
     
