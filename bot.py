@@ -777,6 +777,10 @@ def handle_test(call):
         bot.answer_callback_query(call.id, "❌ Noto'g'ri!", show_alert=False)
     
     bot.delete_message(call.message.chat.id, call.message.message_id)
+    
+    # Fix: call.message is the bot's message, so its from_user is the bot.
+    # We must assign the actual user so send_test correctly identifies the language and XP.
+    call.message.from_user = call.from_user
     send_test(call.message)
 
 @bot.message_handler(func=lambda m: get_state(m.from_user.id) and get_state(m.from_user.id).startswith("test_typing_"))
